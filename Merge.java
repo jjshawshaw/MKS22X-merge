@@ -26,6 +26,57 @@ public class Merge{
     }
   }
 
+  public static void mergesortOpt(int[]data){
+    int[] sto = new int[data.length];
+    mergesortOpt(data, sto, 0, data.length - 1);
+  }
+  private static void mergesortOpt(int[] data, int[] sto, int start, int end){
+    System.out.println("data: " + Arrays.toString(data) + " sto: " + Arrays.toString(sto));
+    int len = end - start + 1;
+    int pivot = (end + start) / 2;
+    if (len <= 1) return;
+    if (len == 2){
+      if (data[start] > data[end]){
+        swap(data, start, end);
+        swap(sto, start, end);
+        System.out.println("swapping " + data[start] + " and " + data[end]);
+      }
+    }
+    else{
+      mergesortOpt(data, sto, start, pivot);
+      mergesortOpt(data, sto, pivot + 1, end);
+      merge(sto, data, start, pivot + 1, end);
+      for (int i = 0; i < data.length; i++){
+        data[i] = sto[i];
+      }
+    }
+  }
+
+  private static void merge(int[] data, int[] sto, int start, int pivot, int end){
+    int i1 = start;
+    int i2 = pivot;
+    int iout = 0;
+    while (i1 < pivot || i2 <= end) {
+      if (i1 >= pivot){
+         sto[iout] = data[i2];
+         i2++;
+       }
+      else if (i2 > end){
+        sto[iout] = data[i1];
+        i1++;
+      }
+      else if (data[i1] > data[i2]){
+        sto[iout] = data[i2];
+        i2++;
+      }
+      else {
+        sto[iout] = data[i1];
+        i1++;
+      }
+      iout++;
+    }
+  }
+
   private static int[] merge(int[] data1, int[] data2){
     int[] out = new int[data1.length + data2.length];
     int i1 = 0;
@@ -61,9 +112,13 @@ public class Merge{
   }
 
   public static void main(String[]args){
-    int[] i = new int[]{9, 6, 3, 23, 2, 1, 0};
+    int[] i = new int[]{3, 6, 9, 0, 1, 2, 3};
+    int[] sto = new int[i.length];
     System.out.println(Arrays.toString(i));
-    mergesort(i);
+    mergesortOpt(i);
+    merge(i, sto, 0, 3, i.length - 1);
+    //System.out.println(Arrays.toString(sto));
     System.out.println(Arrays.toString(i));
+
   }
 }
