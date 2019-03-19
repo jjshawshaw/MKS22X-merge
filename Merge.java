@@ -34,6 +34,9 @@ public class Merge{
     int len = end - start + 1;
     int pivot = (end + start) / 2;
     if (len <= 1) return;
+    if (len <= 4){
+      insertionSort(data, start, end);
+    }
     else{
       mergesortOpt(data, sto, start, pivot);
       mergesortOpt(data, sto, pivot + 1, end);
@@ -102,6 +105,22 @@ public class Merge{
     data[i2] = data[i1];
     data[i1] = temp;
   }
+
+
+  public static void insertionSort(int[] ary, int lo, int hi){
+    for (int i = lo + 1; i <= hi; i++){
+      int temp = ary[i];
+      if (ary[i - 1] > ary[i]){
+        int x = i - 1;
+        while (x > lo && ary[x - 1] > temp){
+          ary[x + 1] = ary[x];
+          x--;
+        }
+        ary[x + 1] = ary[x];
+        ary[x] = temp;
+      }
+    }
+}
 
   public static void main(String[]args){
     System.out.println("Size\t\tMax Value\tquick/builtin ratio ");
