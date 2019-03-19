@@ -31,23 +31,15 @@ public class Merge{
     mergesortOpt(data, sto, 0, data.length - 1);
   }
   private static void mergesortOpt(int[] data, int[] sto, int start, int end){
-    System.out.println("data: " + Arrays.toString(data) + " sto: " + Arrays.toString(sto));
     int len = end - start + 1;
     int pivot = (end + start) / 2;
     if (len <= 1) return;
-    if (len == 2){
-      if (data[start] > data[end]){
-        swap(data, start, end);
-        swap(sto, start, end);
-        System.out.println("swapping " + data[start] + " and " + data[end]);
-      }
-    }
     else{
       mergesortOpt(data, sto, start, pivot);
       mergesortOpt(data, sto, pivot + 1, end);
-      merge(sto, data, start, pivot + 1, end);
-      for (int i = 0; i < data.length; i++){
-        data[i] = sto[i];
+      merge(data, sto, start, pivot + 1, end);
+      for (int i = 0; i < len; i++){
+        data[i + start] = sto[i];
       }
     }
   }
@@ -112,13 +104,37 @@ public class Merge{
   }
 
   public static void main(String[]args){
-    int[] i = new int[]{3, 6, 9, 0, 1, 2, 3};
-    int[] sto = new int[i.length];
-    System.out.println(Arrays.toString(i));
-    mergesortOpt(i);
-    merge(i, sto, 0, 3, i.length - 1);
-    //System.out.println(Arrays.toString(sto));
-    System.out.println(Arrays.toString(i));
-
+    System.out.println("Size\t\tMax Value\tquick/builtin ratio ");
+int[]MAX_LIST = {1000000000,500,10};
+for(int MAX : MAX_LIST){
+  for(int size = 31250; size < 2000001; size*=2){
+    long qtime=0;
+    long btime=0;
+    //average of 5 sorts.
+    for(int trial = 0 ; trial <=5; trial++){
+      int []data1 = new int[size];
+      int []data2 = new int[size];
+      for(int i = 0; i < data1.length; i++){
+        data1[i] = (int)(Math.random()*MAX);
+        data2[i] = data1[i];
+      }
+      long t1,t2;
+      t1 = System.currentTimeMillis();
+      Merge.mergesortOpt(data2);
+      t2 = System.currentTimeMillis();
+      qtime += t2 - t1;
+      t1 = System.currentTimeMillis();
+      Merge.mergesort(data1);
+      t2 = System.currentTimeMillis();
+      btime+= t2 - t1;
+      if(!Arrays.equals(data1,data2)){
+        System.out.println("FAIL TO SORT!");
+        System.exit(0);
+      }
+    }
+    System.out.println(size +"\t\t"+MAX+"\t"+1.0*qtime/btime);
+  }
+  System.out.println();
+}
   }
 }
