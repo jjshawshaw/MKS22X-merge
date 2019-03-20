@@ -3,7 +3,7 @@ public class Merge{
 
   /*sort the array from least to greatest value. This is a wrapper function*/
   public static void mergesort(int[]data){
-    mergesort(data, 0, data.length - 1);
+    mergesortOpt(data);
   }
   private static void mergesort(int[] data, int start, int end){
     int len = end - start + 1;
@@ -34,7 +34,7 @@ public class Merge{
     int len = end - start + 1;
     int pivot = (end + start) / 2;
     if (len <= 1) return;
-    if (len <= 4){
+    if (len <= 3){
       insertionSort(data, start, end);
     }
     else{
@@ -143,7 +143,7 @@ for(int MAX : MAX_LIST){
       t2 = System.currentTimeMillis();
       qtime += t2 - t1;
       t1 = System.currentTimeMillis();
-      Merge.mergesort(data1);
+      Arrays.sort(data1);
       t2 = System.currentTimeMillis();
       btime+= t2 - t1;
       if(!Arrays.equals(data1,data2)){
